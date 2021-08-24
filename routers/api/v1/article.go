@@ -1,16 +1,17 @@
 package v1
 
 import (
-	"net/http"
+	"gin-blog/pkg/logging"
 	"log"
+	"net/http"
 
 	"gin-blog/models"
-	"github.com/astaxie/beego/validation"
+	"gin-blog/pkg/e"
 	"gin-blog/pkg/setting"
 	"gin-blog/pkg/util"
-	"gin-blog/pkg/e"
-	"github.com/unknwon/com"
+	"github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
+	"github.com/unknwon/com"
 )
 
 func GetArticle(c *gin.Context)  {
@@ -30,7 +31,7 @@ func GetArticle(c *gin.Context)  {
 		}
 	} else {
 		for _, err := range valid.Errors {
-			log.Printf("err.key: %s, err.message: %s", err.Key, err.Message)
+			logging.Fatal("err.key: %s, err.message: %s", err.Key, err.Message)
 		}
 	}
 
@@ -102,7 +103,7 @@ func AddArticle(c *gin.Context)  {
 	valid.Min(tagId, 1, "tag_id").Message("标签必须大于0")
 	valid.Required(title, "title").Message("文章标题不能为空")
 	valid.Required(desc, "desc").Message("文章简述不能为空")
-	valid.Required(content, "conten").Message("文章内容不能为空")
+	valid.Required(content, "content").Message("文章内容不能为空")
 	valid.Required(createdBy, "created_by").Message("创建人不能为空")
 	valid.Range(state, 0, 1, "state").Message("状态只允许0或1")
 
@@ -124,7 +125,7 @@ func AddArticle(c *gin.Context)  {
 		}
 	} else {
 		for _, err := range valid.Errors {
-			log.Printf("err.key=%s, err.message=%s", err.Key, err.Message)
+			logging.Fatal("err.key=%s, err.message=%s", err.Key, err.Message)
 		}
 	}
 
